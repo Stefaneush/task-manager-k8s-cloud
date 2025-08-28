@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-manager-app
+  namespace: task-manager
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-manager-app
+  template:
+    metadata:
+      labels:
+        app: task-manager-app
+    spec:
+      containers:
+      - name: task-manager
+        image: task-manager-app:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: PORT
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DB_HOST
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DB_NAME
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: NODE_ENV
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: task-manager-secrets
+              key: JWT_SECRET
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: task-manager-secrets
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: task-manager-secrets
+              key: DB_PASSWORD
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-manager-service
+  namespace: task-manager
+spec:
+  selector:
+    app: task-manager-app
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP
