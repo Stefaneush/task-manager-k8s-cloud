@@ -8,10 +8,11 @@ resources:
   - frontend/
   - database/
   - ingress.yaml
+  - namespace.yaml
+
 
 images:
-  - name: your-registry/task-manager-frontend
+  - name: tardiatest/task-manager-frontend
     newTag: latest
-  - name: your-registry/task-manager-backend
+  - name: tardiatest/task-manager-backend
     newTag: latest
-

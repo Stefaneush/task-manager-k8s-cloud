@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: your-registry/task-manager-frontend:latest   # CI/CD actualiza
+        image: tardiatest/task-manager-frontend:latest   # CI/CD actualiza
         ports:
         - containerPort: 80
         env:

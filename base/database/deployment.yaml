@@ -28,7 +28,7 @@ spec:
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
-              name: app-config
+              name: mysql-config
               key: db-name
         - name: MYSQL_USER
           valueFrom:

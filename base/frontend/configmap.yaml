@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: frontend-config
 data:
-  API_URL: "http://task-manager-backend-service:3000/api"
+  API_URL: "https://task-manager.local/api"
+

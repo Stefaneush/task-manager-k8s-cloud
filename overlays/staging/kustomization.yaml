@@ -6,12 +6,30 @@ resources:
 
 namePrefix: staging-
 
+patchesJson6902:
+  - target:
+      group: ""
+      version: v1
+      kind: Service
+      name: task-manager-backend-service
+    patch: |
+      - op: replace
+        path: /metadata/name
+        value: task-manager-backend-service
+  - target:
+      group: ""
+      version: v1
+      kind: Service
+      name: task-manager-frontend-service
+    patch: |
+      - op: replace
+        path: /metadata/name
+        value: task-manager-frontend-service
+
+
 patchesStrategicMerge:
   - replica-patch.yaml
   - ingress-patch.yaml
-
-configMapGenerator:
-  - name: task-manager-config
-    behavior: merge
-    literals:
-      - NODE_ENV=staging
+  - patch-configmap.yaml
+  - patch-backend-dbhost.yaml
+  

@@ -3,14 +3,18 @@ kind: Ingress
 metadata:
   name: task-manager-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - task-manager.local
+      secretName: taskmanager-tls
   rules:
-  - host: PLACEHOLDER_HOST
+  - host: task-manager.local
     http:
       paths:
       - path: /api
@@ -27,3 +31,4 @@ spec:
             name: task-manager-frontend-service
             port:
               number: 80
+
