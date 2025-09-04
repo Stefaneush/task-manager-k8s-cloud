@@ -32,6 +32,4 @@ patchesStrategicMerge:
 - patch-backend-dbhost.yaml
 images:
 - name: task-manager-backend
-  newName: docker.io/tardiatest/task-manager-backend
 - name: task-manager-frontend
-  newName: docker.io/tardiatest/task-manager-frontend
