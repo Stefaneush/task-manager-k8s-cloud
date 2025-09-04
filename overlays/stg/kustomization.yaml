@@ -6,6 +6,10 @@ resources:
 
 namePrefix: staging-
 
+images:
+- name: task-manager-backend
+- name: task-manager-frontend
+
 patchesJson6902:
   - target:
       group: ""
