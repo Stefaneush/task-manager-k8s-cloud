@@ -2,34 +2,42 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-- ../../base
+  - ../../base
 
 namePrefix: prod-
 
+images:
+  - name: task-manager-frontend
+    newName: docker.io/tardiatest/task-manager-frontend
+    newTag: latest
+  - name: task-manager-backend
+    newName: docker.io/tardiatest/task-manager-backend
+    newTag: latest
+
 patchesJson6902:
-- patch: |
-    - op: replace
-      path: /metadata/name
-      value: task-manager-backend-service
-  target:
-    kind: Service
-    name: task-manager-backend-service
-    version: v1
-- patch: |
-    - op: replace
-      path: /metadata/name
-      value: task-manager-frontend-service
-  target:
-    kind: Service
-    name: task-manager-frontend-service
-    version: v1
+  - target:
+      group: ""
+      version: v1
+      kind: Service
+      name: task-manager-backend-service
+    patch: |
+      - op: replace
+        path: /metadata/name
+        value: task-manager-backend-service
+  - target:
+      group: ""
+      version: v1
+      kind: Service
+      name: task-manager-frontend-service
+    patch: |
+      - op: replace
+        path: /metadata/name
+        value: task-manager-frontend-service
 
 
 patchesStrategicMerge:
-- replica-patch.yaml
-- ingress-patch.yaml
-- patch-configmap.yaml
-- patch-backend-dbhost.yaml
-images:
-- name: task-manager-backend
-- name: task-manager-frontend
+  - replica-patch.yaml
+  - ingress-patch.yaml
+  - patch-configmap.yaml
+  - patch-backend-dbhost.yaml
+  

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: tardiatest/task-manager-backend:latest
+        image: task-manager-backend
         ports:
         - containerPort: 3000
         env:
