@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/Stefaneush/task-manager-k8s-cloud.git
     targetRevision: main
-    path: overlays/production
+    path: overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: task-manager-prod

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deployment script for Task Manager K8s manifests
+# Deployment script for Task Manager K8s manifests with /etc/hosts update
 
 set -e
 
@@ -12,25 +12,38 @@ if [[ ! " ${VALID_ENVS[@]} " =~ " ${ENVIRONMENT} " ]]; then
     exit 1
 fi
 
-echo "Deploying Task Manager to ${ENVIRONMENT} environment..."
+PROFILE="task-manager-${ENVIRONMENT}"
+HOST="task-manager.local"
+
+echo "🚀 Deploying Task Manager to ${ENVIRONMENT} environment..."
 
 # Create cluster
-minikube start -p task-manager-${ENVIRONMENT} --memory=2048 --cpus=2
+minikube start -p ${PROFILE} --memory=2048 --cpus=2
 
 # Apply the kustomization
 kubectl apply -k overlays/${ENVIRONMENT}
 
-echo "Waiting for deployments to be ready..."
+echo "⏳ Waiting for deployments to be ready..."
 kubectl wait --for=condition=available --timeout=300s deployment --all -n task-manager
 
-echo "Deployment completed successfully!"
+echo "✅ Deployment completed successfully!"
 
-minikube addons enable ingress -p task-manager-${ENVIRONMENT}
+# Enable ingress addon
+minikube addons enable ingress -p ${PROFILE}
+echo "🌐 Ingress enabled"
 
-echo "Ingress Enable"
+# Update /etc/hosts with current Minikube IP
+IP=$(minikube ip -p ${PROFILE})
 
-# 🔁 Ejecutar el script de despliegue ArgoCD pasando el environment
-echo "Running ArgoCD deployment script for environment ${ENVIRONMENT}..."
+if grep -q "$HOST" /etc/hosts; then
+  sudo sed -i "s/^.*$HOST/$IP $HOST/" /etc/hosts
+else
+  echo "$IP $HOST" | sudo tee -a /etc/hosts
+fi
+
+echo "✔ /etc/hosts updated: $HOST -> $IP"
+
+# Run ArgoCD deployment script
+echo "📦 Running ArgoCD deployment script for environment ${ENVIRONMENT}..."
 ./deployargoapp.sh "$ENVIRONMENT"
-
 
