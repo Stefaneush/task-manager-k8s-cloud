@@ -7,10 +7,10 @@ resources:
 namePrefix: prod-
 
 images:
-- digest: sha256:6a5d4662c33083571e6d2cf37b7a6558fcd4f50a65e6b3d72d1a9235466088da
+- digest: sha256:53282103ad964f541442512ed9ae80de67e9c75c93db9d4d7c1b405e6f09952e
   name: task-manager-backend
   newName: docker.io/tardiatest/task-manager-backend
-- digest: sha256:43979cd144d16d1b4f8f86f08d5bea9420c3cb17c274b70dc33fa028ca120049
+- digest: sha256:c0dc494500ef4f1f334c7b4d9cd215bbf7bb15b7bd68c418424719d93c29819a
   name: task-manager-frontend
   newName: docker.io/tardiatest/task-manager-frontend
 
